@@ -1,0 +1,85 @@
+/* privacy.css */
+
+/* Стили для секции с политикой */
+.privacy {
+  padding: 100px 0;
+  text-align: left; /* Переопределяем text-align: center из common.css */
+}
+
+/* Контейнер для текста */
+.text-content {
+  max-width: 840px; /* Чуть шире для документа */
+  margin: 0 auto;
+  padding: 50px 60px;
+  border-radius: 16px;
+  background: var(--tile-background);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10px);
+}
+
+/* Стили для заголовков, параграфов и списков внутри */
+.text-content h1 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 30px;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
+}
+
+.text-content h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.text-content h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: var(--accent-color);
+}
+
+.text-content p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-color-light);
+  margin-bottom: 20px;
+  max-width: none; /* Сбрасываем ограничение ширины из common.css */
+}
+
+.text-content ul {
+  list-style: disc;
+  padding-left: 30px;
+  margin-bottom: 20px;
+}
+
+.text-content li {
+  margin-bottom: 10px;
+  color: var(--text-color-light);
+}
+
+.text-content strong {
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+.text-content code {
+  background-color: var(--background-color);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.text-content a {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.text-content a:hover {
+  color: var(--primary-color);
+}

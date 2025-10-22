@@ -1,0 +1,364 @@
+/* ==========================================================================
+   Стили для отдельных секций (главная страница)
+   ========================================================================== */
+
+/* -- Главный экран (Hero) -- */
+.hero {
+  padding: 80px 0;
+  /* Герой не является <section>, поэтому анимацию появления ему нужно задать отдельно */
+  opacity: 0; 
+  animation: fadeIn .8s ease forwards;
+  animation-delay: 0.1s;
+}
+.hero .container {
+  /* --- СТИЛИ ДЛЯ БЛОКА --- */
+  text-align: start; /* Выравнивание текста */
+  padding: 60px 40px; /* Внутренние отступы (можешь поменять) */
+  border-radius: 16px; /* Скругление углов */
+  overflow: hidden; /* Обрезает фон по скругленным углам */
+  box-shadow:
+    inset 0px 1px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -1px 0px rgba(255, 255, 255, 0.05),
+    var(--shadow-sm),
+    var(--shadow-lg);
+  background-image: url('photos/hero-back.png'); /* <-- НАСТРОЙКА ПУТИ */
+  backdrop-filter: blur(160px);
+
+  /* * 4. РАСТЯГИВАНИЕ ФОНА 
+   * 'cover' - Растянуть, сохранив пропорции (рекомендуется).
+   * 'contain' - Показать весь фон.
+   */
+  background-size: cover; /* <-- НАСТРОЙКА РАСТЯГИВАНИЯ */
+
+  /* * 5. РАСПОЛОЖЕНИЕ ФОНА
+   * 'center center' - По центру.
+   */
+  background-position: center center; /* <-- НАСТРОЙКА ПОЗИЦИИ */
+
+  /* * 6. ПОВТОР ФОНА
+   * 'no-repeat' - Не повторять (обязательно).
+   */
+  background-repeat: no-repeat;
+  transform: translateZ(0);
+}
+.hero h1 {
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero .subtitle {
+  font-size: 20px;
+  max-width: 650px;
+  margin: 0 auto 30px auto;
+  color: var(--text-color-light);
+}
+
+/* -- Секция возможностей (Features) -- */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 60px;
+  text-align: left;
+}
+.feature-card {
+  background: var(--tile-background);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow:
+    inset 0px 1px 0px rgba(255, 255, 255, 0),
+    inset 0px -1px 0px rgba(255, 255, 255, 0.),
+    var(--shadow-sm);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    inset 0px 1px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -1px 0px rgba(255, 255, 255, 0.05),
+    var(--shadow-lg);
+}
+.feature-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+/* -- Секция "Как это работает" -- */
+.steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 60px;
+}
+.step { flex: 1; }
+.step-number {
+  width: 50px; height: 50px;
+  background: var(--primary-color);
+  color: #FFF;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 auto 20px auto;
+}
+.step h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* ==========================================================================
+   Тарифы (Pricing)
+   ========================================================================== */
+.pricing-cards {
+  display: flex;
+  justify-content: center;
+  /* --- 3. ВЫРОВНЯТЬ КАРТОЧКИ ПО ЦЕНТРУ --- */
+  align-items: center;
+  gap: 30px;
+  margin-top: 60px;
+}
+/* Стили для ОБЫЧНЫХ карточек (1 и 3) */
+.price-card {
+  position: relative;
+  background: var(--tile-background);
+  padding: 30px 40px;
+  border-radius: 12px;
+  flex: 1;
+  max-width: 350px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  box-shadow:
+    inset 0px 1px 0px rgba(255, 255, 255, 0),
+    inset 0px -1px 0px rgba(255, 255, 255, 0),
+    var(--shadow-sm);
+  /* --- НОВОЕ: Выравнивание по левому краю --- */
+  text-align: left;
+}
+.price-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    inset 0px 1px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -1px 0px rgba(255, 255, 255, 0.05),
+    var(--shadow-lg);
+}
+
+/* --- 1. УБРАТЬ СВЕЧЕНИЕ У БОКОВЫХ КАРТОЧЕК --- */
+/* (Добавляем им обычную статичную рамку) */
+.price-card:not(.popular) {
+  border: 1px solid var(--border-color);
+}
+/* (И полностью скрываем элемент с "бегущей" рамкой) */
+.price-card:not(.popular) .price-card__border {
+  display: none;
+}
+/* --- КОНЕЦ ЗАДАЧИ 1 --- */
+
+/* --- НОВЫЙ КОНТЕЙНЕР ДЛЯ ПОПУЛЯРНОЙ КАРТОЧКИ (2) --- */
+.popular-card-container {
+  width: 350px;
+  flex-shrink: 0;
+  transform: scale(1.05);
+  border-radius: 32px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  background: linear-gradient(
+    to top right,
+    #0ea5e9,
+    #008bf0 40%,
+    #0070bd 65%,
+    #004163 100%
+  );
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  /* --- НОВОЕ: Выравнивание по левому краю --- */
+  text-align: left;
+  box-shadow:
+    inset 0px 1px 0px rgba(255, 255, 255, 0),
+    inset 0px -1px 0px rgba(255, 255, 255, 0),
+    var(--shadow-sm);
+}
+.popular-card-container:hover {
+  transform: scale(1.05) translateY(-5px);
+  box-shadow:
+    inset 0px 1px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -1px 0px rgba(255, 255, 255, 0.05),
+    var(--shadow-lg);
+}
+
+/* --- НОВАЯ ШАПКА ДЛЯ ПОПУЛЯРНОЙ КАРТОЧКИ --- */
+.popular-card-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 18px;
+  justify-content: space-between;
+  color: #fff;
+}
+.popular-card-header .popular-badge {
+  position: static;
+  transform: none;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  font-style: italic;
+  text-shadow: 2px 2px 6px #2975ee;
+}
+.popular-card-header svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* --- ИЗМЕНЕНИЯ ДЛЯ ВНУТРЕННЕЙ КАРТОЧКИ (которая .popular) --- */
+.price-card.popular {
+  transform: none;
+  box-shadow: none;
+  border-radius: 28px;
+  max-width: 100%;
+  flex: 1;
+  /* --- 4. ИСПРАВИТЬ ФОН ЦЕНТРАЛЬНОЙ КАРТОЧКИ --- */
+  /* Делаем фон НЕПРОЗРАЧНЫМ (solid), используя те же RGB-значения, 
+     что и у --tile-background, но без альфа-канала (прозрачности) */
+  background: rgb(41, 51, 65);
+}
+.price-card.popular:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* --- ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ КАРТОЧЕК --- */
+.price-card h3 { font-size: 24px; }
+.price {
+  font-size: 48px;
+  font-weight: 800;
+}
+.price span {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-color-light);
+}
+
+/* --- НОВЫЕ СТИЛИ ДЛЯ СПИСКА С ГАЛОЧКАМИ --- */
+.price-divider {
+  border: none;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 10px 0;
+}
+.price-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* 12px */
+}
+.price-card li {
+  margin-bottom: 0; /* Сбрасываем старый отступ */
+}
+.price-card li.card__list_item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* 12px */
+}
+.price-card .check {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  flex-shrink: 0; /* Не сжиматься */
+}
+.price-card .check .check_svg {
+  width: 12px;
+  height: 12px;
+  fill: var(--background-color); /* (Цвет фона карточки) */
+}
+.price-card .list_text {
+  font-size: 16px;
+  color: var(--text-color);
+}
+
+/* --- НОВЫЙ СТИЛЬ: Кнопки на 100% ширины --- */
+.price-card .btn,
+.price-card .btn-cta-outline {
+  width: 100%;
+}
+
+/* --- СТИЛИ ДЛЯ АНИМИРОВАННОЙ РАМКИ (Теперь только для .popular) --- */
+.price-card__content {
+  position: relative;
+  z-index: 2;
+}
+.price-card__border {
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 1px);
+  height: calc(100% + 1px);
+  background-image: linear-gradient(
+    180deg,
+    rgb(40, 40, 40) -50%,
+    rgb(144, 144, 144) 100%
+  );
+  /* Маска, которая вырезает центр блика */
+  padding: 1px;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/* Подгоняем "бегущую" рамку .popular под ее новый border-radius */
+.price-card.popular .price-card__border {
+  border-radius: 30px;
+}
+
+/* Анимированный "блик" */
+.price-card__border::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 10rem;
+  /* --- 2. СДЕЛАТЬ СВЕЧЕНИЕ БЕЛЫМ --- */
+  background-image: linear-gradient(
+    0deg,
+    hsla(0, 0%, 100%, 0) 0%,
+    #FFF 40%, /* Было var(--primary-color) */
+    #FFF 60%, /* Было var(--primary-color) */
+    hsla(0, 0%, 100%, 0) 100%
+  );
+  animation: price-card-rotate 8s linear infinite;
+}
+
+/* Анимация вращения */
+@keyframes price-card-rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+/* --- КОНЕЦ СТИЛЕЙ РАМКИ --- */
