@@ -5,20 +5,46 @@ let currentLang; // Глобальная переменная для хране�
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Proposly Script: DOM-дерево готово. Начинаю работу.");
 
-    // --- КОД ДЛЯ ПЛАВНОЙ ТЕНИ ШАПКИ (остается без изменений) ---
+    // --- КОД ДЛЯ ПЛАВНОЙ ТЕНИ ШАПКИ ---
     const headerContainer = document.querySelector('.header .container'); 
     const scrollDistance = 400; 
 
-    function updateHeaderEffect() {
-        const progress = Math.min(window.scrollY / scrollDistance, 1.0);
-        if (headerContainer) {
-            headerContainer.style.setProperty('--scroll-progress', progress);
+    // Функция в оригинальном виде
+    function updateHeaderEffect(container, distance) {
+        const progress = Math.min(window.scrollY / distance, 1.0);
+        
+        if (container) {
+            container.style.setProperty('--scroll-progress', progress);
         }
     }
-    updateHeaderEffect();
-    window.addEventListener('scroll', updateHeaderEffect);
-    console.log("Proposly Script: Логика для *плавной* тени шапки (с фиксом блюра) активирована.");
-    // --- КОНЕЦ КОДА ДЛЯ ПЛАВNOЙ ТЕНИ ШАПКИ ---
+
+    // === НОВЫЙ ФИКС (ПОПЫТКА №6) ===
+    // Комбинируем Попытку 4 (min. value) и Попытку 5 (delay)
+    // Мы ждем 50мс, а затем устанавливаем НЕ 0, а 0.00001.
+    // Это заставляет браузер перерисовать шапку со ЗНАЧЕНИЕМ,
+    // которое гарантированно не-прозрачное.
+    setTimeout(() => {
+        // На 99.9% window.scrollY будет 0, так что progress будет 0
+        const progress = Math.min(window.scrollY / scrollDistance, 1.0);
+        
+        // Если progress = 0 (мы вверху), устанавливаем МИНИМАЛЬНОЕ 
+        // значение вместо 0.
+        const effectiveProgress = (progress === 0) ? 0.00001 : progress;
+
+        if (headerContainer) {
+            headerContainer.style.setProperty('--scroll-progress', effectiveProgress);
+        }
+
+        console.log(`Proposly Script: Отложенный *первый* вызов с effectiveProgress = ${effectiveProgress} выполнен (фикс блюра).`);
+    }, 50); // 50ms - небольшая, но надежная задержка
+    
+    // Добавляем слушатель скролла (как и было)
+    window.addEventListener('scroll', () => {
+        updateHeaderEffect(headerContainer, scrollDistance);
+    });
+    
+    console.log("Proposly Script: Логика для *плавной* тени шапки активирована.");
+    // --- КОНЕЦ КОДА ДЛЯ ПЛАVNOЙ ТЕНИ ШАПКИ ---
 
     // --- НАЧАЛО НОВОГО КОДА ДЛЯ ПЕРЕВОДА ---
     
@@ -33,7 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Если в localStorage нет, определяем по браузеру
         const userLang = navigator.language.slice(0, 2);
         console.log(`Proposly Script: Язык браузера определён как '${userLang}'.`);
+        
+        // === ИСПРАВЛЕННАЯ СТРОКА ===
         currentLang = (userLang === 'ru') ? 'ru' : 'en';
+        // ==========================
+
         // Сохраняем в localStorage для будущих визитов
         localStorage.setItem('proposlyLang', currentLang);
     }
@@ -67,7 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // === ЭТА ФУНКЦИЯ ПОЛНОСТЬЮ ОБНОВЛЕНА ===
 async function loadLanguage(lang) {
-    const filePath = `messages_${lang}.json`;
+    //
+    // === ИЗМЕНЕНИЕ ЗДЕСЬ: Добавлен '/' в начало пути ===
+    //
+    const filePath = `/messages_${lang}.json`;
     console.log(`Proposly Script: Пытаюсь загрузить файл: ${filePath}`);
 
     try {
@@ -105,6 +138,10 @@ async function loadLanguage(lang) {
             if (contentFilePath) {
                 try {
                     console.log(`Proposly Script: Загружаю HTML из '${contentFilePath}'...`);
+                    //
+                    // === ИЗМЕНЕНИЕ ЗДЕСЬ: fetch() теперь использует contentFilePath,
+                    // который (после следующих шагов) УЖЕ будет абсолютным.
+                    //
                     const contentResponse = await fetch(contentFilePath);
                     if (!contentResponse.ok) {
                         throw new Error(`Сетевая ошибка: Не удалось найти файл контента '${contentFilePath}' (Статус: ${contentResponse.status}).`);

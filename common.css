@@ -166,6 +166,7 @@ main p {
   left: 0;
   width: 100%;
   z-index: 1000;
+  transform: translateZ(0);
 }
 .header .container {
   backdrop-filter: blur(16px);
