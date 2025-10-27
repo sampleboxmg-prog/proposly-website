@@ -4,89 +4,278 @@
 
 /* -- Главный экран (Hero) -- */
 .hero {
-  padding: 80px 0;
+  /* ИСПРАВЛЕНИЕ: Блок занимает ТОЧНО всю высоту экрана и центрирует контент */
+  display: flex;
+  align-items: center; /* Центрируем по вертикали */
+  justify-content: center; /* Центрируем по горизонтали */
+  padding: 40px;
+
   /* Герой не является <section>, поэтому анимацию появления ему нужно задать отдельно */
   opacity: 0; 
   animation: fadeIn .8s ease forwards;
   animation-delay: 0.1s;
+  text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
 }
-.hero .container {
-  /* --- СТИЛИ ДЛЯ БЛОКА --- */
-  text-align: start; /* Выравнивание текста */
-  padding: 60px 40px; /* Внутренние отступы (можешь поменять) */
+
+/* НОВЫЙ БЛОК: Контейнер, который будет иметь ширину шапки и фон */
+.hero-content-wrapper {
+  /* Ограничиваем ширину контейнера, как у шапки */
+  max-width: 1140px; 
+  width: 100%;
+  height: 415px;
+  
+  /* --- СТИЛИ ДЛЯ БЛОКА (теперь применяются к wrapper) --- */
+  /* УДАЛЕНО: text-align: center; // Оно здесь больше не нужно */
+  padding: 60px 40px; /* Изначальные внутренние отступы */
   border-radius: 16px; /* Скругление углов */
-  overflow: hidden; /* Обрезает фон по скругленным углам */
+  overflow: hidden; 
   box-shadow:
     inset 0px 1px 0px rgba(255, 255, 255, 0.2),
     inset 0px -1px 0px rgba(255, 255, 255, 0.05),
     var(--shadow-sm),
     var(--shadow-lg);
   background-image: url('photos/hero-back.png'); /* <-- НАСТРОЙКА ПУТИ */
-  backdrop-filter: blur(160px);
 
-  /* * 4. РАСТЯГИВАНИЕ ФОНА 
-   * 'cover' - Растянуть, сохранив пропорции (рекомендуется).
-   * 'contain' - Показать весь фон.
-   */
-  background-size: cover; /* <-- НАСТРОЙКА РАСТЯГИВАНИЯ */
+  /* * 4. РАСТЯГИВАНИЕ ФОНА */
+  background-size: cover; 
 
-  /* * 5. РАСПОЛОЖЕНИЕ ФОНА
-   * 'center center' - По центру.
-   */
-  background-position: center center; /* <-- НАСТРОЙКА ПОЗИЦИИ */
+  /* * 5. РАСПОЛОЖЕНИЕ ФОНА */
+  background-position: center center; 
 
-  /* * 6. ПОВТОР ФОНА
-   * 'no-repeat' - Не повторять (обязательно).
-   */
+  /* * 6. ПОВТОР ФОНА */
   background-repeat: no-repeat;
   transform: translateZ(0);
+  align-items: center;
+
+  /* *** ИЗМЕНЕНИЯ ДЛЯ ВЫРАВНИВАНИЯ И СДВИГА *** */
+  text-align: left; /* 1. Выравнивание текста по левому краю */
+  
+  /* 2. Увеличенный левый отступ для сдвига текста правее */
+  /* Пример: Увеличиваем левый padding до 80px. 
+       В оригинальном padding: 60px 40px; было 40px. 
+       Новое значение будет: padding: 60px 40px 60px 80px;
+       Чтобы не переписывать все, можно использовать: */
+  padding-left: 200px; /* <--- Увеличиваем левый отступ для сдвига текста */
 }
+
 .hero h1 {
-  font-size: 52px;
+  font-size: 64px;
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 20px;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
 }
 .hero .subtitle {
   font-size: 20px;
-  max-width: 650px;
-  margin: 0 auto 30px auto;
   color: var(--text-color-light);
+  margin-left: 0;
+  padding-left: 0;
 }
 
-/* -- Секция возможностей (Features) -- */
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  margin-top: 60px;
-  text-align: left;
+/* ==========================================================================
+   Секция возможностей (Features) - НОВЫЕ ПЛИТКИ
+   ========================================================================== */
+
+/* Переменные, специфичные для этих плиток (взяты из :root плиток) */
+.features {
+  --color-accent-solid: #1399f3;
+  --color-accent-white: rgba(255, 255, 255, 0.1);
+  --color-accent-border-gradient: linear-gradient(71deg, var(--color-accent-white), var(--color-accent-solid),var(--color-accent-white));
+
+  /* Размеры и отступы */
+  --gap-cards: 30px;
+  --width-card-max: 350px;
+  --border-radius-card: 45px;
+  --padding-card: 30px;
+  
+  /* === ИЗМЕНЕНИЕ ЗДЕСЬ === */
+  --size-icon: 65px; /* Размер фоновой плитки иконки (как вы и просили) */
+  --size-icon-inner: 40px; /* Новый размер для самой иконки (можете поменять на свой) */
+  /* === КОНЕЦ ИЗМЕНЕНИЯ === */
+
+  --padding-icon-bottom: 10px;
+  
+  /* Типографика */
+  --font-size-title: 28px;
+  --line-height-title: 40px;
+  --padding-title-bottom: 5px;
+  --font-size-desc: 16px;
+  --line-height-desc: 32px;
+  --width-desc-max: 300px;
+  
+  /* Анимация */
+  --transition-duration: 0.3s;
+  --hover-scale: 1.02;
+
+  /* * ======================================
+   * ДОБАВЛЕННЫЕ ПЕРЕМЕННЫЕ (ОПТИМИЗАЦИЯ)
+   * ======================================
+   */
+   
+  /* Ширина прозрачной рамки, через которую виден градиент */
+  --width-card-border: 2px;
+  
+  /* Смещение градиентной рамки (::after) */
+  --offset-card-border-glow: -1px; 
+  
+  /* Цвет-остановка в SVG-градиенте фона иконки */
+  --color-svg-plaque-stop: #302A1A; 
 }
-.feature-card {
+
+/* * ======================================
+ * ОСНОВНЫЕ СТИЛИ ПЛИТОК
+ * ======================================
+ */
+
+.cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: var(--gap-cards);
+  margin-top: 60px; /* Добавлено для отступа от заголовка H2 */
+  text-align: left; /* Добавлено для сброса text-align: center у секции */
+}
+
+.card {
+  max-width: var(--width-card-max);
+  border: 0;
+  flex: 1;
+  margin: 0;
+  border-radius: var(--border-radius-card); /* Для круглой тени */
+  transition: transform var(--transition-duration) ease, 
+              box-shadow var(--transition-duration) ease;
+}
+
+.card:hover {
+  transform: scale(var(--hover-scale));
+  box-shadow: 0 0 35px -20px var(--color-accent-solid); 
+}
+
+.container-card {
+  position: relative;
+  
+  /* ИСПОЛЬЗУЕМ ПЕРЕМЕННУЮ */
+  border: var(--width-card-border) solid transparent;
+  
   background: var(--tile-background);
-  padding: 30px;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
-  box-shadow:
-    inset 0px 1px 0px rgba(255, 255, 255, 0),
-    inset 0px -1px 0px rgba(255, 255, 255, 0.),
-    var(--shadow-sm);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  background-clip: padding-box;
+  border-radius: var(--border-radius-card);
+  padding: var(--padding-card);
+  height: 100%; 
+  box-sizing: border-box; 
 }
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow:
-    inset 0px 1px 0px rgba(255, 255, 255, 0.2),
-    inset 0px -1px 0px rgba(255, 255, 255, 0.05),
-    var(--shadow-lg);
+
+/* * ======================================
+ * СТИЛИ ИКОНКИ И ЕЕ ПЛИТКИ
+ * ======================================
+ */
+ 
+/* 1. Общий контейнер для плитки и иконки */
+.icon-wrapper {
+  position: relative;
+  /* Использует --size-icon для размера плитки */
+  width: var(--size-icon); 
+  height: var(--size-icon);
+  margin-bottom: var(--padding-icon-bottom);
 }
-.feature-card h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  font-size: 20px;
+
+/* 2. Маленькая плитка (SVG-фон) */
+.icon-wrapper svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 3. Сама иконка (накладывается поверх) */
+.icon {
+  position: absolute; 
+  z-index: 2; 
+  
+  width: var(--size-icon-inner);
+  height: var(--size-icon-inner);
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* Цвет берется из переменной */
+  background-color: var(--color-accent-solid);
+  
+  /* Общие свойства маски */
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* === ИЗМЕНЕНИЕ ЗДЕСЬ (ПУТИ К GIF) === */
+.icon-rocket {
+  -webkit-mask-image: url('photos/rocket.gif');
+  mask-image: url('photos/rocket.gif');
+}
+
+.icon-profile {
+  -webkit-mask-image: url('photos/profile.gif');
+  mask-image: url('photos/profile.gif');
+}
+
+.icon-workflow {
+  -webkit-mask-image: url('photos/workflow.gif');
+  mask-image: url('photos/workflow.gif');
+}
+/* === КОНЕЦ ИЗМЕНЕНИЯ === */
+
+
+.bg-yellow-box {
+  position: relative;
+}
+
+/* Это рамка БОЛЬШОЙ плитки */
+.bg-yellow-box::after {
+  position: absolute;
+  
+  /* ИСПОЛЬЗУЕМ ПЕРЕМЕННЫЕ */
+  top: var(--offset-card-border-glow);
+  bottom: var(--offset-card-border-glow);
+  left: var(--offset-card-border-glow);
+  right: var(--offset-card-border-glow);
+  
+  content: "";
+  z-index: -1;
+  border-radius: var(--border-radius-card);
+  background: var(--color-accent-border-gradient);
+  transition: background var(--transition-duration) ease;
+}
+
+/* При наведении рамка БОЛЬШОЙ плитки тоже берет цвет из переменной */
+.card:hover .container-card::after {
+  background: var(--color-accent-solid); 
+}
+
+.card-title {
+  font-weight: 600;
+  /* ИЗМЕНЕНО: Используем глобальную переменную цвета */
+  color: var(--text-color); 
+  letter-spacing: -0.02em;
+  line-height: var(--line-height-title);
+  font-style: normal;
+  font-size: var(--font-size-title);
+  margin: 0px;
+  padding-bottom: var(--padding-title-bottom);
+}
+
+.card-description {
+  font-weight: 600;
+  line-height: var(--line-height-desc);
+  /* ИЗМЕНЕНО: Используем глобальную переменную цвета */
+  color: var(--text-color-light); 
+  font-size: var(--font-size-desc);
+  max-width: var(--width-desc-max);
+  margin: 0px;
 }
 
 /* -- Секция "Как это работает" -- */
@@ -135,8 +324,8 @@
   max-width: 350px;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   box-shadow:
-    inset 0px 1px 0px rgba(255, 255, 255, 0),
-    inset 0px -1px 0px rgba(255, 255, 255, 0),
+    inset 0px 1px 0px rgba(255, 255, 255, 0.4),
+    inset 0px -1px 0px rgba(255, 255, 255, 0.2),
     var(--shadow-sm);
   /* --- НОВОЕ: Выравнивание по левому краю --- */
   text-align: left;
@@ -144,8 +333,8 @@
 .price-card:hover {
   transform: translateY(-5px);
   box-shadow:
-    inset 0px 1px 0px rgba(255, 255, 255, 0.2),
-    inset 0px -1px 0px rgba(255, 255, 255, 0.05),
+    inset 0px 1px 1px rgba(255, 255, 255, 0.5),
+    inset 0px -1px 0px rgba(255, 255, 255, 0.3),
     var(--shadow-lg);
 }
 
@@ -226,7 +415,7 @@
   /* --- 4. ИСПРАВИТЬ ФОН ЦЕНТРАЛЬНОЙ КАРТОЧКИ --- */
   /* Делаем фон НЕПРОЗРАЧНЫМ (solid), используя те же RGB-значения, 
      что и у --tile-background, но без альфа-канала (прозрачности) */
-  background: rgb(41, 51, 65);
+  background: var(--tile-background);
 }
 .price-card.popular:hover {
   transform: none;

@@ -1,4 +1,36 @@
 /* ==========================================================================
+   0. TTNorms Font Face Declarations (Новые шрифты)
+   ========================================================================== */
+@font-face {
+    font-family: 'TTNorms';
+    src: url('fonts/TTNorms-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'TTNorms';
+    src: url('fonts/TTNorms-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'TTNorms';
+    src: url('fonts/TTNorms-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'TTNorms';
+    src: url('fonts/TTNorms-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ==========================================================================
    1. CSS Переменные
    ========================================================================== */
 :root {
@@ -7,13 +39,16 @@
   --accent-color: #60A5FA;
 
   --background-color: #0F172A;          /* slate-900 */
-  --tile-background: rgba(41, 51, 65, 0.8);
+  --tile-background: #131a24;
   --text-color: #F8FAFC;                 /* slate-50 */
   --text-color-light: rgba(248, 250, 252, 0.6);
   --border-color: rgba(255, 255, 255, 0.10);
 
   --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.20);
   --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.30);
+  
+  /* Переменная для скролла с fallback */
+  --scroll-progress: 0;
 }
 
 /* ==========================================================================
@@ -21,12 +56,16 @@
    ========================================================================== */
 * { margin: 0; padding: 0; box-sizing: border-box }
 body {
-  font-family: 'Manrope', system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
+  /* ИЗМЕНЕНИЕ: Замена 'Manrope' на 'TTNorms' */
+  font-family: 'TTNorms', system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
   color: var(--text-color);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background-color);
+  
+  /* ИСПРАВЛЕНИЕ: Для более чистого рендеринга шрифтов и устранения "прыжков" */
+  text-rendering: optimizeLegibility; 
 }
 
 /* --- ОБНОВЛЁННЫЙ КОД ДЛЯ ЭФФЕКТА ЗЕРНА (более мелкого) --- */
@@ -60,7 +99,7 @@ a { text-decoration: none }
 
 /* ==========================================================================
    3. Скроллбар
-   ========================================================================== */
+   ========================================================================= */
 ::-webkit-scrollbar { width: 8px }
 ::-webkit-scrollbar-track { background: transparent }
 ::-webkit-scrollbar-thumb {
@@ -77,15 +116,15 @@ header, main section, footer { opacity: 0; animation: fadeIn .8s ease forwards }
   from { opacity: 0; transform: translateY(10px) }
   to { opacity: 1; transform: translateY(0) }
 }
-/* Задержка анимации для шапки (теперь здесь) */
-header {
-  animation-delay: 0.1s;
-}
 
 /* ==========================================================================
    5. Заголовочная типографика
    ========================================================================== */
-h1, h2, h3 { font-family: 'Inter', sans-serif; letter-spacing: -.02em }
+h1, h2, h3 { 
+  /* ИЗМЕНЕНИЕ: Замена 'Inter' на 'TTNorms' */
+  font-family: 'TTNorms', sans-serif; 
+  letter-spacing: -.02em 
+}
 
 /* ==========================================================================
    6. Компоненты (Кнопки)
@@ -138,8 +177,118 @@ h1, h2, h3 { font-family: 'Inter', sans-serif; letter-spacing: -.02em }
 }
 
 /* ==========================================================================
-   7. Общие стили для всех секций
+   7. Стеклянная шапка (Header)
    ========================================================================== */
+.fixed-glass-header {
+  position: fixed; /* ИЗМЕНЕНО: Было sticky */
+  top: 20px;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.glass-header-content {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 15px 30px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, calc(0.1 + 0.3 * var(--glass-scroll-progress, 0)));
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: 
+    /* Внутренние тени */
+    inset 0px 1px 0px rgba(255, 255, 255, 0.2),
+    inset 0px 0px 1px rgba(0, 0, 0, 0.2),
+    inset 0px -1px 3px rgba(0, 0, 0, 0.2),
+    /* Внешние тени */
+    var(--shadow-lg),
+    0 8px 20px rgba(0, 0, 0, calc(0.2 * var(--glass-scroll-progress, 0)));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.glass-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.glass-logo img { 
+  height: 40px; 
+}
+
+.glass-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.glass-nav a {
+  color: var(--text-color);
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.glass-nav a:hover { 
+  color: var(--primary-color); 
+}
+
+.glass-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.glass-lang-switcher {
+  color: var(--text-color);
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.glass-lang-switcher:hover {
+  color: var(--primary-color);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.glass-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: 18px;
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  background: linear-gradient(165deg, var(--accent-color), var(--primary-color-hover));
+  color: #fff;
+  box-shadow:
+    inset 0px 0.5px 4px rgba(255, 255, 255, 0.2),
+    inset 0px -1px 1px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.glass-btn:hover {
+  filter: brightness(1.02);
+  box-shadow:
+    inset 0px 1px 4px rgba(255, 255, 255, 0.2),
+    inset 0px -2px 3px rgba(0, 0, 0, 0.5);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   8. Общие стили для всех секций
+   ========================================================================== */
+main {
+  padding-top: 100px; /* ИЗМЕНЕНО: Компенсация фиксированной шапки */
+}
+
 main section {
   padding: 100px 0;
   text-align: center;
@@ -155,87 +304,6 @@ main p {
   margin-left: auto;
   margin-right: auto;
   color: var(--text-color-light);
-}
-
-/* ==========================================================================
-   8. Шапка сайта (Header)
-   ========================================================================== */
-.header {
-  position: sticky;
-  top: 20px;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  transform: translateZ(0);
-}
-.header .container {
-  backdrop-filter: blur(16px);
-  border-radius: 16px;
-  background-color: rgba(0, 0, 0, calc(0.3 * var(--scroll-progress, 0)));
-  box-shadow:
-    /* Статичные внутренние тени */
-    inset 0px 1px 0px rgba(255, 255, 255, 0.2),
-    inset 0px -1px 0px rgba(255, 255, 255, 0.05),
-    /* Статичная тень --shadow-lg (как ты и просил) */
-    var(--shadow-lg),
-    /* * Динамическая тень --shadow-sm (которая 0 8px 20px rgba(0,0,0,0.20)).
-     * Мы берём её альфа-канал (0.20) и умножаем на наш прогресс.
-    */
-    0 8px 20px rgba(0, 0, 0, calc(0.2 * var(--scroll-progress, 0)));
-  position: relative;
-  background-clip: padding-box;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 30px;
-}
-.header .container::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: -1;
-  margin: -1px;
-  border-radius: inherit;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.15),
-    rgba(0, 0, 0, 0.05),
-    rgba(0, 0, 0, 0.15)
-  );
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 800;
-  font-size: 24px;
-  color: var(--text-color);
-}
-.logo img { height: 40px; }
-.nav a {
-  color: var(--text-color);
-  margin: 0 15px;
-  font-weight: 700;
-  transition: color 0.2s ease-in-out;
-}
-.nav a:hover { color: var(--primary-color); }
-.header-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Небольшой отступ между переключателем и кнопкой */
-}
-.lang-switcher {
-  color: var(--text-color);
-  font-weight: 700;
-  font-size: 16px;
-  text-decoration: none;
-  padding: 8px 12px;
-  border-radius: 12px;
-  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-}
-.lang-switcher:hover {
-  color: var(--primary-color);
-  background-color: rgba(255, 255, 255, 0.05);
 }
 
 /* ==========================================================================

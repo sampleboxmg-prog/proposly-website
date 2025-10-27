@@ -5,46 +5,33 @@ let currentLang; // Глобальная переменная для хране�
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Proposly Script: DOM-дерево готово. Начинаю работу.");
 
-    // --- КОД ДЛЯ ПЛАВНОЙ ТЕНИ ШАПКИ ---
-    const headerContainer = document.querySelector('.header .container'); 
-    const scrollDistance = 400; 
 
-    // Функция в оригинальном виде
-    function updateHeaderEffect(container, distance) {
+    // --- КОД ДЛЯ НОВОГО ЗАКРЕПЛЕННОГО БЛОКА ---
+    const glassHeader = document.querySelector('.glass-header-content');
+    const glassScrollDistance = 150;
+
+    // Функция для обновления эффекта затемнения
+    function updateGlassHeaderEffect(container, distance) {
         const progress = Math.min(window.scrollY / distance, 1.0);
         
         if (container) {
-            container.style.setProperty('--scroll-progress', progress);
+            container.style.setProperty('--glass-scroll-progress', progress);
         }
     }
 
-    // === НОВЫЙ ФИКС (ПОПЫТКА №6) ===
-    // Комбинируем Попытку 4 (min. value) и Попытку 5 (delay)
-    // Мы ждем 50мс, а затем устанавливаем НЕ 0, а 0.00001.
-    // Это заставляет браузер перерисовать шапку со ЗНАЧЕНИЕМ,
-    // которое гарантированно не-прозрачное.
-    setTimeout(() => {
-        // На 99.9% window.scrollY будет 0, так что progress будет 0
-        const progress = Math.min(window.scrollY / scrollDistance, 1.0);
-        
-        // Если progress = 0 (мы вверху), устанавливаем МИНИМАЛЬНОЕ 
-        // значение вместо 0.
-        const effectiveProgress = (progress === 0) ? 0.00001 : progress;
+    // Устанавливаем начальное значение
+    if (glassHeader) {
+        glassHeader.style.setProperty('--glass-scroll-progress', '0');
+        console.log("Proposly Script: Переменная --glass-scroll-progress установлена в 0");
+    } 
 
-        if (headerContainer) {
-            headerContainer.style.setProperty('--scroll-progress', effectiveProgress);
-        }
-
-        console.log(`Proposly Script: Отложенный *первый* вызов с effectiveProgress = ${effectiveProgress} выполнен (фикс блюра).`);
-    }, 50); // 50ms - небольшая, но надежная задержка
     
-    // Добавляем слушатель скролла (как и было)
+    // Добавляем слушатель скролла для нового блока
     window.addEventListener('scroll', () => {
-        updateHeaderEffect(headerContainer, scrollDistance);
+        updateGlassHeaderEffect(glassHeader, glassScrollDistance);
     });
     
-    console.log("Proposly Script: Логика для *плавной* тени шапки активирована.");
-    // --- КОНЕЦ КОДА ДЛЯ ПЛАVNOЙ ТЕНИ ШАПКИ ---
+    console.log("Proposly Script: Логика для стеклянной шапки активирована.");
 
     // --- НАЧАЛО НОВОГО КОДА ДЛЯ ПЕРЕВОДА ---
     
