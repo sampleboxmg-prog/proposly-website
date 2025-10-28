@@ -1,0 +1,12 @@
+RewriteEngine On
+RewriteBase /
+
+# Эти 2 строки проверяют, что запрашиваемый URL - не реальный файл и не реальная папка
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Эта строка проверяет, существует ли файл с добавлением .html
+RewriteCond %{REQUEST_FILENAME}.html -f
+
+# Если все условия выше верны - "тихо" добавляем .html к запросу
+RewriteRule ^(.*)$ $1.html [L]

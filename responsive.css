@@ -1,0 +1,177 @@
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
+/* * 1. Небольшие ноутбуки (1025px - 1200px)
+ * Слегка уменьшаем контейнеры, чтобы они не прилипали к краям.
+ */
+@media (max-width: 1200px) {
+  .container,
+  .glass-header-content {
+    /* Вместо 1140px, делаем контейнер "резиновым" */
+    max-width: 95%;
+  }
+
+  .hero-content-wrapper {
+    max-width: 95%;
+  }
+}
+
+/* * 2. Планшеты (768px - 1024px)
+ * Скрываем навигацию, уменьшаем шрифты, перестраиваем секции в колонку.
+ */
+@media (max-width: 1024px) {
+  /* --- Общие --- */
+  main section {
+    padding: 80px 0;
+  }
+  main h2 {
+    font-size: 36px;
+  }
+
+  /* --- Шапка --- */
+  .glass-nav {
+    /* Самое простое решение без JS (бургер-меню) - скрыть навигацию */
+    display: none;
+  }
+  .glass-header-content {
+    /* Контейнер теперь занимает почти всю ширину */
+    max-width: 90%;
+  }
+
+  /* --- Hero --- */
+  .hero-content-wrapper {
+    max-width: 90%;
+    padding-left: 80px; /* Уменьшаем отступ слева */
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  .hero h1 {
+    font-size: 52px;
+  }
+  .hero .subtitle {
+    font-size: 18px;
+  }
+
+  /* --- Как это работает (Steps) --- */
+  .steps {
+    /* Перестраиваем из горизонтального в вертикальный стек */
+    flex-direction: column;
+    align-items: center; /* Центрируем карточки */
+    gap: 30px;
+  }
+  .step {
+    max-width: 500px; /* Ограничиваем ширину, чтобы не растягивались */
+  }
+
+  /* --- Тарифы (Pricing) --- */
+  .pricing-cards {
+    /* Тоже перестраиваем в колонку */
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+  .popular-card-container {
+    /* Убираем эффект "увеличения" на планшетах, т.к. он мешает */
+    transform: scale(1);
+  }
+  .price-card {
+    max-width: 450px;
+    width: 100%;
+  }
+  .popular-card-container {
+    width: 450px;
+  }
+}
+
+/* * 3. Телефоны (до 767px)
+ * Полная перестройка в одну колонку, сильное уменьшение 
+ * шрифтов и отступов.
+ */
+@media (max-width: 767px) {
+  /* --- Базовые --- */
+  body {
+    line-height: 1.5; /* Улучшаем читаемость на мобильных */
+  }
+  .container {
+    padding: 0 20px;
+  }
+  main {
+    padding-top: 80px; /* (Шапка + отступ) */
+  }
+  main section {
+    padding: 60px 0;
+  }
+  main h2 {
+    font-size: 30px;
+    margin-bottom: 15px;
+  }
+  main p {
+    font-size: 16px;
+  }
+
+  /* --- Шапка --- */
+  .fixed-glass-header {
+    top: 10px; /* Ближе к верху */
+  }
+  .glass-header-content {
+    padding: 10px 15px;
+    max-width: calc(100% - 20px); /* 10px отступ по бокам */
+  }
+  .glass-logo span {
+    /* Скрываем текст "Proposly", оставляем только иконку */
+    display: none;
+  }
+  .glass-logo img {
+    height: 32px; /* Уменьшаем иконку */
+  }
+  .glass-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 14px;
+  }
+  .glass-lang-switcher {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  /* --- Hero --- */
+  .hero {
+    /* Убираем отступ секции, т.к. отступ у wrapper'а */
+    padding: 20px 0;
+  }
+  .hero-content-wrapper {
+    /* Полностью переопределяем стили hero */
+    padding: 40px 20px; /* Равномерные отступы */
+    text-align: center; /* Центрируем текст */
+    height: auto; /* Высота по контенту */
+    background-position: center 20%;
+  }
+  .hero h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+  }
+  .hero .subtitle {
+    font-size: 18px;
+  }
+
+  /* --- Секции (Features, Steps, Pricing) --- */
+  .cards-container,
+  .steps,
+  .pricing-cards {
+    margin-top: 40px; /* Уменьшаем отступ от заголовка H2 */
+  }
+  
+  /* --- Тарифы (Pricing) --- */
+  .price {
+    font-size: 40px;
+  }
+  .price-card {
+    padding: 25px 30px;
+    max-width: 100%; /* На всю ширину */
+  }
+  .popular-card-container {
+    width: 100%;
+    max-width: 100%;
+  }
+}
