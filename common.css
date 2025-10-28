@@ -94,6 +94,14 @@ body::after {
 }
 /* --- КОНЕЦ НОВОГО КОДА --- */
 
+
+/* * ==========================================================================
+ * 2.1. Шторка (html body::before) УДАЛЕНА
+ * ==========================================================================
+ */
+/* (Блок 'html body::before' полностью удален отсюда) */
+
+
 .container { max-width: 1140px; margin: 0 auto; padding: 0 20px }
 a { text-decoration: none }
 
@@ -111,10 +119,22 @@ a { text-decoration: none }
 /* ==========================================================================
    4. Общая анимация появления
    ========================================================================== */
-header, main section, footer { opacity: 0; animation: fadeIn .8s ease forwards }
+
+/* * === ИЗМЕНЕНИЕ ЗДЕСЬ ===
+ * Убираем 'main section' из этого селектора...
+ */
+header, footer { opacity: 0; animation: fadeIn .8s ease forwards }
+
+/* * ...и добавляем анимацию к ПРЯМОМУ ПОТОМКУ 'main section'
+ * (т.е. к .container, .hero-content-wrapper и т.д.)
+ * Это должно исправить баг с 'mask-attachment: fixed'
+ */
+main section > * { opacity: 0; animation: fadeIn .8s ease forwards }
+
+/* Анимация 'fadeIn' остается БЕЗ 'transform' */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px) }
-  to { opacity: 1; transform: translateY(0) }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ==========================================================================
@@ -192,7 +212,7 @@ h1, h2, h3 {
   margin: 0 auto;
   padding: 15px 30px;
   border-radius: 16px;
-  background: rgba(0, 0, 0, calc(0.1 + 0.3 * var(--glass-scroll-progress, 0)));
+  background: rgba(0, 0, 0, calc(0.2 + 0.3 * var(--glass-scroll-progress, 0)));
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   box-shadow: 
@@ -206,6 +226,10 @@ h1, h2, h3 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  /* === ИЗМЕНЕНИЯ ЗДЕСЬ (для шума) === */
+  position: relative; /* 1. Для позиционирования псевдо-элемента */
+  overflow: hidden;   /* 2. Чтобы шум обрезался по скругленным углам */
 }
 
 .glass-logo {
@@ -286,7 +310,30 @@ h1, h2, h3 {
    8. Общие стили для всех секций
    ========================================================================== */
 main {
-  padding-top: 100px; /* ИЗМЕНЕНО: Компенсация фиксированной шапки */
+  padding-top: 100px; /* Компенсация фиксированной шапки */
+  
+  /* * === ФИНАЛЬНЫЙ КОД: МАСКА ДЛЯ MAIN ===
+   * Эта маска "прибита" к экрану (fixed) и будет "обрезать" 
+   * только <main> (контент), оставляя фон (из background.css) видимым.
+   */
+  -webkit-mask-image: linear-gradient(
+    to bottom, 
+    transparent 0, 
+    transparent 100px, /* Скрывает контент в верхних 100px */
+    black 100px, 
+    black 100%
+  );
+  mask-image: linear-gradient(
+    to bottom, 
+    transparent 0, 
+    transparent 100px, 
+    black 100px, 
+    black 100%
+  );
+  
+  /* Фиксируем маску относительно viewport */
+  -webkit-mask-attachment: fixed;
+  mask-attachment: fixed;
 }
 
 main section {
@@ -321,3 +368,26 @@ main p {
   font-weight: 700;
 }
 .footer a:hover { color: var(--primary-color); }
+
+/* ==========================================================================
+   10. Эффект шума для стеклянной шапки (НОВЫЙ КОД)
+   ========================================================================== */
+.glass-header-content::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* Помещаем шум ЗА контент (ссылки, кнопки), но ПОВЕРХ фона шапки */
+  z-index: -1; 
+  pointer-events: none;
+
+  /* Копируем тот же фон шума, что и у body */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="1.5" numOctaves="1" stitchTiles="stitch" /></filter><rect width="100%" height="100%" filter="url(%23noise)" /></svg>');
+  
+  /* Копируем те же настройки наложения */
+  mix-blend-mode: soft-light;
+  opacity: 0.15;
+}
